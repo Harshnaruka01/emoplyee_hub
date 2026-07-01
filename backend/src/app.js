@@ -22,6 +22,14 @@ app.use('/api/auth', authRoutes);
 app.use('/api/employees', employeeRoutes);
 
 // Base route diagnostics
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Welcome to the Employee Hub API. Server is running!',
+    status: 'ok',
+    time: new Date()
+  });
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', time: new Date() });
 });
