@@ -1,0 +1,51 @@
+{
+  "users": [
+    {
+      "_id": "admin-id-1",
+      "username": "admin",
+      "password": "$2a$10$qFe0zFmLLzMGV6SeBY9w0OqIUED63UOEvESPLRMKp4jCxPsrBhpfe"
+    }
+  ],
+  "employees": [
+    {
+      "_id": "emp-seeded-2",
+      "hrNumber": "HR1002",
+      "name": "Priya Patel",
+      "mobileNumber": "8765432109",
+      "email": "priya.patel@company.com",
+      "department": "Human Resources",
+      "designation": "HR Manager",
+      "address": "456 HR Hub, Bandra West, Mumbai, MH",
+      "joiningDate": "2024-03-15T00:00:00.000Z",
+      "status": "Active",
+      "photoUrl": ""
+    },
+    {
+      "_id": "emp-seeded-3",
+      "hrNumber": "HR1003",
+      "name": "Vikram Singh",
+      "mobileNumber": "7654321098",
+      "email": "vikram.singh@company.com",
+      "department": "Marketing",
+      "designation": "Marketing Specialist",
+      "address": "789 Ad Lane, Indiranagar, Bengaluru, KA",
+      "joiningDate": "2025-02-20T00:00:00.000Z",
+      "status": "Active",
+      "photoUrl": ""
+    },
+    {
+      "_id": "emp-mr288p0kg8j9d",
+      "hrNumber": "HR1004",
+      "name": "Harsh",
+      "mobileNumber": "09461816161",
+      "email": "2023btechaidsharsh13985@poornima.edu.in",
+      "department": "EFWF",
+      "designation": "WEF",
+      "address": "83,mangal colony vivekanund nagar sector-4,Alwar",
+      "joiningDate": "2026-07-01T00:00:00.000Z",
+      "status": "Active",
+      "photoUrl": "/uploads/photo-1782919501286-591102715.jpg",
+      "updatedAt": "2026-07-01T15:25:08.132Z"
+    }
+  ]
+}
