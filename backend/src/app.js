@@ -12,7 +12,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve uploaded employee photos statically
-app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
+const uploadsPath = process.env.VERCEL
+  ? '/tmp'
+  : path.resolve(__dirname, '../uploads');
+app.use('/uploads', express.static(uploadsPath));
 
 // Routes mapping
 app.use('/api/auth', authRoutes);
