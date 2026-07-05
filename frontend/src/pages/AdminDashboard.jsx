@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Users, UserPlus, LogOut, Search, Edit2, Trash2, Upload, Download, 
   Briefcase, FileSpreadsheet, Eye, X, Image as ImageIcon, CheckCircle, 
-  AlertTriangle, Phone, Mail, Award, Calendar, RefreshCw
+  AlertTriangle, Phone, Mail, Award, Calendar, RefreshCw, Menu
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { 
@@ -56,6 +56,7 @@ export const AdminDashboard = () => {
 
   // Checkbox selection states
   const [selectedIds, setSelectedIds] = useState([]);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   // Reset selection when employees list changes
   useEffect(() => {
@@ -308,27 +309,67 @@ export const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row relative overflow-hidden">
+    <div className="min-h-screen md:h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row relative md:overflow-hidden overflow-x-hidden">
       {/* Background ambient glowing blobs */}
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-brand-600/5 blur-[150px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-emerald-600/5 blur-[150px] pointer-events-none" />
 
-      {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 shrink-0 flex flex-col justify-between z-10">
+      {/* Mobile Top Navigation Header */}
+      <header className="w-full h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-6 z-20 md:hidden shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg shadow-brand-500/20">
+            <Briefcase className="h-4.5 w-4.5 text-white" />
+          </div>
+          <div>
+            <h1 className="text-base font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+              EMPLOYEE<span className="text-brand-500 font-extrabold">HUB</span>
+            </h1>
+            <p className="text-[8px] text-brand-400 font-bold uppercase tracking-wider">Console</p>
+          </div>
+        </div>
+        <button
+          onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+          className="p-2 hover:bg-slate-800 rounded-lg text-slate-350 hover:text-white transition-colors"
+          aria-label="Toggle Menu"
+        >
+          {isMobileSidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+      </header>
+
+      {/* Backdrop for mobile drawer */}
+      {isMobileSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 md:hidden animate-fade-in"
+          onClick={() => setIsMobileSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar Drawer */}
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 shrink-0 flex flex-col justify-between transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 h-full md:h-auto ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div>
           {/* Logo Area */}
-          <div className="p-6 border-b border-slate-800 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg shadow-brand-500/30">
-              <Briefcase className="h-5 w-5 text-white" />
+          <div className="p-4 sm:p-6 border-b border-slate-800 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg shadow-brand-500/30 shrink-0">
+                <Briefcase className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent leading-none">
+                  EMPLOYEE<span className="text-brand-500 font-extrabold">HUB</span>
+                </h1>
+                <span className="px-2 py-0.5 text-[8px] bg-slate-950 text-brand-400 font-bold border border-slate-800 rounded-full tracking-wide mt-1 inline-block">
+                  ADMIN CONSOLE
+                </span>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-                EMPLOYEE<span className="text-brand-500 font-extrabold">HUB</span>
-              </h1>
-              <span className="px-2 py-0.5 text-[8px] bg-slate-950 text-brand-400 font-bold border border-slate-800 rounded-full tracking-wide">
-                ADMIN CONSOLE
-              </span>
-            </div>
+            
+            {/* Close button for mobile drawer */}
+            <button 
+              onClick={() => setIsMobileSidebarOpen(false)}
+              className="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white md:hidden shrink-0"
+            >
+              <X className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
+            </button>
           </div>
 
           {/* Nav links */}
@@ -338,15 +379,21 @@ export const AdminDashboard = () => {
               <span>Employees Directory</span>
             </div>
             <button
-              onClick={() => setIsImportModalOpen(true)}
-              className="w-full px-4 py-3 hover:bg-slate-800 text-slate-400 hover:text-slate-200 rounded-xl flex items-center gap-3 font-medium text-sm transition-all duration-150"
+              onClick={() => {
+                setIsImportModalOpen(true);
+                setIsMobileSidebarOpen(false);
+              }}
+              className="w-full px-4 py-3 hover:bg-slate-800 text-slate-400 hover:text-slate-200 rounded-xl flex items-center gap-3 font-medium text-sm transition-all duration-150 text-left"
             >
               <FileSpreadsheet className="h-4 w-4" />
               <span>Bulk Actions</span>
             </button>
             <button
-              onClick={() => navigate('/')}
-              className="w-full px-4 py-3 hover:bg-slate-800 text-slate-400 hover:text-slate-200 rounded-xl flex items-center gap-3 font-medium text-sm transition-all duration-150"
+              onClick={() => {
+                navigate('/');
+                setIsMobileSidebarOpen(false);
+              }}
+              className="w-full px-4 py-3 hover:bg-slate-800 text-slate-400 hover:text-slate-200 rounded-xl flex items-center gap-3 font-medium text-sm transition-all duration-150 text-left"
             >
               <Eye className="h-4 w-4" />
               <span>Public Directory</span>
@@ -369,7 +416,10 @@ export const AdminDashboard = () => {
           </div>
           
           <button
-            onClick={logout}
+            onClick={() => {
+              logout();
+              setIsMobileSidebarOpen(false);
+            }}
             className="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-rose-950/20 hover:border-rose-900/30 text-slate-400 hover:text-rose-400 flex items-center justify-center gap-2 text-xs font-semibold transition-all duration-150 active:scale-95"
           >
             <LogOut className="h-4 w-4" /> Log Out
@@ -378,7 +428,7 @@ export const AdminDashboard = () => {
       </aside>
 
       {/* Main Dashboard Area */}
-      <main className="flex-1 flex flex-col min-w-0 z-10 max-h-screen overflow-y-auto">
+      <main className="flex-1 flex flex-col min-w-0 z-10 overflow-y-auto overflow-x-hidden md:max-h-screen">
         {/* Top Header */}
         <header className="p-6 border-b border-slate-850 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/40 backdrop-blur-md">
           <div>
@@ -386,24 +436,24 @@ export const AdminDashboard = () => {
             <p className="text-xs text-slate-500 mt-0.5">Manage, upload, edit, and audit staff profiles</p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {selectedIds.length > 0 && (
               <button
                 onClick={handleBulkDelete}
-                className="px-4 py-2 rounded-xl bg-rose-950/40 hover:bg-rose-900/30 border border-rose-900/40 text-rose-450 font-semibold text-xs transition-all active:scale-95 duration-150 flex items-center gap-2"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-rose-950/40 hover:bg-rose-900/30 border border-rose-900/40 text-rose-450 font-semibold text-xs transition-all active:scale-95 duration-150 flex items-center gap-2"
               >
                 <Trash2 className="h-3.5 w-3.5 text-rose-450" /> Delete Selected ({selectedIds.length})
               </button>
             )}
             <button
               onClick={handleExport}
-              className="px-4 py-2 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 text-slate-300 font-semibold text-xs transition-all active:scale-95 duration-150 flex items-center gap-2"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 text-slate-300 font-semibold text-xs transition-all active:scale-95 duration-150 flex items-center gap-2"
             >
               <Download className="h-3.5 w-3.5" /> Export Data
             </button>
             <button
               onClick={handleOpenAdd}
-              className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs transition-all active:scale-95 duration-150 flex items-center gap-2 shadow-lg shadow-brand-500/20"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs transition-all active:scale-95 duration-150 flex items-center gap-2 shadow-lg shadow-brand-500/20"
             >
               <UserPlus className="h-3.5 w-3.5" /> Add Employee
             </button>
@@ -412,44 +462,44 @@ export const AdminDashboard = () => {
 
         <div className="p-6 md:p-8 space-y-6">
           {/* Stats Bar */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="glass-panel p-5 rounded-2xl border-slate-850 flex items-center gap-4">
-              <div className="h-10 w-10 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 text-brand-400">
-                <Users className="h-5 w-5" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="glass-panel p-3.5 sm:p-5 rounded-2xl border-slate-850 flex items-center gap-3 sm:gap-4">
+              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 text-brand-400 shrink-0">
+                <Users className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
               </div>
-              <div>
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Total Staff</span>
-                <span className="text-2xl font-black text-white">{stats.total}</span>
-              </div>
-            </div>
-
-            <div className="glass-panel p-5 rounded-2xl border-slate-850 flex items-center gap-4">
-              <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
-                <CheckCircle className="h-5 w-5" />
-              </div>
-              <div>
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Active Staff</span>
-                <span className="text-2xl font-black text-white">{stats.active}</span>
+              <div className="min-w-0">
+                <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase tracking-wider block font-bold truncate">Total Staff</span>
+                <span className="text-xl sm:text-2xl font-black text-white">{stats.total}</span>
               </div>
             </div>
 
-            <div className="glass-panel p-5 rounded-2xl border-slate-850 flex items-center gap-4">
-              <div className="h-10 w-10 rounded-xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20 text-amber-400">
-                <AlertTriangle className="h-5 w-5" />
+            <div className="glass-panel p-3.5 sm:p-5 rounded-2xl border-slate-850 flex items-center gap-3 sm:gap-4">
+              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400 shrink-0">
+                <CheckCircle className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
               </div>
-              <div>
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">On Leave</span>
-                <span className="text-2xl font-black text-white">{stats.leave}</span>
+              <div className="min-w-0">
+                <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase tracking-wider block font-bold truncate">Active Staff</span>
+                <span className="text-xl sm:text-2xl font-black text-white">{stats.active}</span>
               </div>
             </div>
 
-            <div className="glass-panel p-5 rounded-2xl border-slate-850 flex items-center gap-4">
-              <div className="h-10 w-10 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20 text-purple-400">
-                <Briefcase className="h-5 w-5" />
+            <div className="glass-panel p-3.5 sm:p-5 rounded-2xl border-slate-850 flex items-center gap-3 sm:gap-4">
+              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20 text-amber-400 shrink-0">
+                <AlertTriangle className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
               </div>
-              <div>
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Departments</span>
-                <span className="text-2xl font-black text-white">{stats.departments}</span>
+              <div className="min-w-0">
+                <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase tracking-wider block font-bold truncate">On Leave</span>
+                <span className="text-xl sm:text-2xl font-black text-white">{stats.leave}</span>
+              </div>
+            </div>
+
+            <div className="glass-panel p-3.5 sm:p-5 rounded-2xl border-slate-850 flex items-center gap-3 sm:gap-4">
+              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20 text-purple-400 shrink-0">
+                <Briefcase className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase tracking-wider block font-bold truncate">Departments</span>
+                <span className="text-xl sm:text-2xl font-black text-white">{stats.departments}</span>
               </div>
             </div>
           </div>
@@ -476,7 +526,7 @@ export const AdminDashboard = () => {
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto hidden md:block">
               <table className="glass-table">
                 <thead>
                   <tr>
@@ -567,6 +617,111 @@ export const AdminDashboard = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Cards Grid View */}
+            <div className="block md:hidden p-4 space-y-4">
+              {employees.length === 0 && !loading ? (
+                <div className="text-center py-8 text-slate-500 text-sm">
+                  No employees found matching the search criteria.
+                </div>
+              ) : (
+                employees.map(emp => (
+                  <div key={emp._id} className="glass-card rounded-2xl p-4 border-slate-850 relative space-y-3">
+                    
+                    {/* Checkbox selection */}
+                    <div className="absolute top-4 left-4 z-10">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.includes(emp._id)}
+                        onChange={() => handleToggleSelect(emp._id)}
+                        className="rounded border-slate-800 bg-slate-950/60 text-brand-500 focus:ring-brand-500/30 focus:ring-offset-0 focus:ring-2 h-4 w-4 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Photo & Core Bio */}
+                    <div className="flex items-center gap-4 pl-6">
+                      <div className="relative shrink-0">
+                        {emp.photoUrl ? (
+                          <img
+                            src={getPhotoUrl(emp.photoUrl)}
+                            alt={emp.name}
+                            className="h-12 w-12 rounded-xl object-cover border border-slate-800"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div
+                          style={{ display: emp.photoUrl ? 'none' : 'flex' }}
+                          className="h-12 w-12 rounded-xl bg-gradient-to-tr from-slate-900 to-slate-800 border border-slate-800 flex items-center justify-center text-xs font-extrabold text-slate-400"
+                        >
+                          {getInitials(emp.name)}
+                        </div>
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-slate-100 truncate text-sm">{emp.name}</h4>
+                        <p className="text-[10px] font-semibold text-brand-400 mt-0.5">{emp.designation}</p>
+                        <div className="flex gap-2 items-center mt-1">
+                          <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wide">{emp.hrNumber}</span>
+                          <span className={`px-2 py-0.2 rounded-full text-[8px] font-bold border ${getStatusColor(emp.status)}`}>
+                            {emp.status}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Details Breakdown */}
+                    <div className="grid grid-cols-1 gap-1.5 pt-2.5 border-t border-slate-850/60 text-[11px] text-slate-300">
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="text-slate-500 font-bold uppercase tracking-wider text-[8px] shrink-0">Department</span>
+                        <span className="font-medium text-slate-200 block truncate max-w-[140px] sm:max-w-[220px] text-right">{emp.department}</span>
+                      </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="text-slate-500 font-bold uppercase tracking-wider text-[8px] shrink-0">Email</span>
+                        <span className="font-medium text-slate-200 block truncate max-w-[140px] sm:max-w-[220px] text-right" title={emp.email}>{emp.email}</span>
+                      </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="text-slate-500 font-bold uppercase tracking-wider text-[8px] shrink-0">Mobile</span>
+                        <span className="font-medium text-slate-200 block truncate max-w-[140px] sm:max-w-[220px] text-right">{emp.mobileNumber}</span>
+                      </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="text-slate-500 font-bold uppercase tracking-wider text-[8px] shrink-0">Address</span>
+                        <span className="font-medium text-slate-200 block truncate max-w-[140px] sm:max-w-[220px] text-right" title={emp.address}>{emp.address}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 font-bold uppercase tracking-wider text-[8px]">Up to Date</span>
+                        <span className="font-medium text-slate-200">
+                          {new Date(emp.updatedAt || emp.joiningDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="flex justify-end gap-2 pt-2.5 border-t border-slate-850/40">
+                      <button
+                        onClick={() => handleOpenEdit(emp)}
+                        className="px-2.5 py-1 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-lg text-[10px] font-bold text-slate-300 flex items-center gap-1 transition-colors"
+                      >
+                        <Edit2 className="h-3 w-3" /> Edit
+                      </button>
+                      <button
+                        onClick={() => setDeleteConfirmId(emp._id)}
+                        className="px-2.5 py-1 bg-rose-950/20 border border-rose-900/30 hover:bg-rose-950/40 rounded-lg text-[10px] font-bold text-rose-450 flex items-center gap-1 transition-colors"
+                      >
+                        <Trash2 className="h-3 w-3" /> Delete
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </main>
@@ -575,8 +730,8 @@ export const AdminDashboard = () => {
       {/* ADD / EDIT EMPLOYEE MODAL */}
       {/* ============================================================== */}
       {isFormModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="glass-panel w-full max-w-2xl rounded-3xl border-slate-800 shadow-2xl relative overflow-hidden animate-scale-up my-8 max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+          <div className="glass-panel w-full max-w-2xl rounded-3xl border-slate-800 shadow-2xl relative overflow-hidden animate-scale-up my-4 sm:my-8 max-h-[95vh] sm:max-h-[90vh] flex flex-col">
             <div className="h-1.5 w-full bg-gradient-to-r from-brand-600 to-brand-400 shrink-0" />
             
             {/* Modal Header */}
@@ -793,8 +948,8 @@ export const AdminDashboard = () => {
       {/* EXCEL IMPORT / BULK OPERATIONS MODAL */}
       {/* ============================================================== */}
       {isImportModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="glass-panel w-full max-w-xl rounded-3xl border-slate-800 shadow-2xl relative overflow-hidden animate-scale-up my-8 flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+          <div className="glass-panel w-full max-w-xl rounded-3xl border-slate-800 shadow-2xl relative overflow-hidden animate-scale-up my-4 sm:my-8 flex flex-col max-h-[95vh] sm:max-h-[90vh]">
             <div className="h-1.5 w-full bg-gradient-to-r from-emerald-600 to-emerald-400 shrink-0" />
             
             {/* Header */}

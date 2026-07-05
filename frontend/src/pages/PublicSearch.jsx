@@ -89,56 +89,56 @@ export const PublicSearch = () => {
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-emerald-600/5 blur-[150px] pointer-events-none" />
 
       {/* Header */}
-      <header className="w-full max-w-5xl flex justify-between items-center mb-8 z-10">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg shadow-brand-500/30">
-            <Briefcase className="h-5 w-5 text-white" />
+      <header className="w-full max-w-5xl flex justify-between items-center mb-8 z-10 gap-4">
+        <div className="flex items-center gap-2 md:gap-3">
+          <div className="h-9 w-9 md:h-10 md:w-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg shadow-brand-500/30 shrink-0">
+            <Briefcase className="h-4.5 w-4.5 md:h-5 md:w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+            <h1 className="text-lg md:text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent leading-none">
               EMPLOYEE<span className="text-brand-500 font-extrabold">HUB</span>
             </h1>
-            <p className="text-xs text-slate-500">Corporate Directory</p>
+            <p className="text-[10px] md:text-xs text-slate-500 mt-0.5">Corporate Directory</p>
           </div>
         </div>
 
         <button
           onClick={() => navigate('/admin/login')}
-          className="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-slate-800 hover:border-slate-700 transition-all active:scale-95 duration-200 shadow-md text-slate-300"
+          className="px-3.5 py-1.5 md:px-4 md:py-2 text-[10px] md:text-xs font-semibold rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-slate-800 hover:border-slate-700 transition-all active:scale-95 duration-200 shadow-md text-slate-300 shrink-0"
         >
           Admin Portal
         </button>
       </header>
 
       {/* Main Content */}
-      <main className="w-full max-w-2xl flex-1 flex flex-col justify-center items-center z-10 py-12">
+      <main className="w-full max-w-2xl flex-1 flex flex-col justify-center items-center z-10 py-8 md:py-12">
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-3">
+          <h2 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight mb-3">
             Search Employee Profile
           </h2>
-          <p className="text-slate-400 max-w-md mx-auto text-sm">
+          <p className="text-slate-400 max-w-md mx-auto text-xs md:text-sm px-2">
             Enter the unique HR Number, Full Name, or Mobile Number to fetch details from the database.
           </p>
         </div>
 
         {/* Search bar */}
-        <form onSubmit={handleSearch} className="w-full mb-10">
+        <form onSubmit={handleSearch} className="w-full mb-10 px-2 sm:px-0">
           <div className="relative flex items-center">
-            <Search className="absolute left-4 h-5 w-5 text-slate-500" />
+            <Search className="absolute left-4 h-4.5 w-4.5 text-slate-500" />
             <input
               type="text"
-              placeholder="e.g. HR1001, Aarav Sharma, 98765..."
+              placeholder="Search by HR No., name, or mobile..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full !pl-12 pr-28 py-3.5 glass-input text-base text-white outline-none focus:ring-4 focus:ring-brand-500/20"
+              className="w-full !pl-11 pr-24 md:!pl-12 md:pr-28 py-3.5 glass-input text-sm md:text-base text-white outline-none focus:ring-4 focus:ring-brand-500/20"
             />
             <button
               type="submit"
               disabled={loading}
-              className="absolute right-2 px-5 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm transition-all active:scale-95 duration-200 shadow-lg shadow-brand-500/20 disabled:opacity-50 disabled:pointer-events-none"
+              className="absolute right-1.5 px-4 py-2 md:right-2 md:px-5 md:py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-medium text-xs md:text-sm transition-all active:scale-95 duration-200 shadow-lg shadow-brand-500/20 disabled:opacity-50 disabled:pointer-events-none"
             >
               {loading ? (
-                <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 'Search'
               )}
